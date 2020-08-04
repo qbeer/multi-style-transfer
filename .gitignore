@@ -1,0 +1,7 @@
+.vscode/
+*/__pycache__
+data/VOC*
+data/cifar*
+*.png
+runs/
+weights/

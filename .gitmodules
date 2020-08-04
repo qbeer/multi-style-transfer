@@ -1,0 +1,3 @@
+[submodule "batch_transfroms"]
+	path = batch_transfroms
+	url = https://github.com/pratogab/batch-transforms.git
