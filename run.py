@@ -11,7 +11,7 @@ net.eval()
 
 style = 0
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(-1)
 
 ret, _ = cap.read()
 

@@ -10,13 +10,16 @@ class FastStylizationNetwork(torch.nn.Module):
         super(FastStylizationNetwork, self).__init__()
         self.conv1 = torch.nn.Conv2d(3, 32, (9, 9), stride=1, padding=0)
         self.padding1 = (4, 4, 4, 4)
-        self.instance_norm1 = CategoricalConditionalInstanceNorm2d(32, n_styles)
+        self.instance_norm1 = CategoricalConditionalInstanceNorm2d(
+            32, n_styles)
         self.conv2 = torch.nn.Conv2d(32, 64, (3, 3), stride=2, padding=0)
         self.padding2 = (0, 1, 0, 1)
-        self.instance_norm2 = CategoricalConditionalInstanceNorm2d(64, n_styles)
+        self.instance_norm2 = CategoricalConditionalInstanceNorm2d(
+            64, n_styles)
         self.conv3 = torch.nn.Conv2d(64, 128, (3, 3), stride=2, padding=0)
         self.padding3 = (0, 1, 0, 1)
-        self.instance_norm3 = CategoricalConditionalInstanceNorm2d(128, n_styles)
+        self.instance_norm3 = CategoricalConditionalInstanceNorm2d(
+            128, n_styles)
 
         self.residual1 = ResidualBlock(128, n_styles)
         self.residual2 = ResidualBlock(128, n_styles)
@@ -29,7 +32,8 @@ class FastStylizationNetwork(torch.nn.Module):
 
         self.last_conv = torch.nn.Conv2d(32, 3, (9, 9), stride=1, padding=0)
         self.padding_last = (4, 4, 4, 4)
-        self.instance_norm_last = CategoricalConditionalInstanceNorm2d(3, n_styles)
+        self.instance_norm_last = CategoricalConditionalInstanceNorm2d(
+            3, n_styles)
 
     def forward(self, x, styles):
         x = self.conv1(F.pad(x, self.padding1, mode='reflect')).clamp(min=0)

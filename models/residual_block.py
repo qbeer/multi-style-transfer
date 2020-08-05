@@ -12,14 +12,16 @@ class ResidualBlock(torch.nn.Module):
                                      stride=1,
                                      padding=0)
         self.padding1 = (1, 1, 1, 1)
-        self.instance_norm1 = CategoricalConditionalInstanceNorm2d(channels, n_styles)
+        self.instance_norm1 = CategoricalConditionalInstanceNorm2d(
+            channels, n_styles)
         self.conv2 = torch.nn.Conv2d(channels,
                                      channels,
                                      kernel_size=(3, 3),
                                      stride=1,
                                      padding=0)
         self.padding2 = (1, 1, 1, 1)
-        self.instance_norm2 = CategoricalConditionalInstanceNorm2d(channels, n_styles)
+        self.instance_norm2 = CategoricalConditionalInstanceNorm2d(
+            channels, n_styles)
 
     def forward(self, x, styles):
         conv_relu = self.conv1(F.pad(x, self.padding1,
