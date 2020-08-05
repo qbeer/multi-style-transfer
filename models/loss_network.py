@@ -6,7 +6,7 @@ class LossNetwork(torch.nn.Module):
     def __init__(self):
         super(LossNetwork, self).__init__()
         model = torch.hub.load('pytorch/vision:v0.6.0',
-                               'vgg16_bn',
+                               'vgg16',
                                pretrained=True)
         features = list(model.features)
         self.features = torch.nn.ModuleList(features).eval()
@@ -15,7 +15,7 @@ class LossNetwork(torch.nn.Module):
         results = []
         for ind, model in enumerate(self.features):
             x = model(x)
-            if ind in {5, 12, 16, 22}:
+            if ind in {8, 13, 18, 22}:
                 results.append(x)
 
         vgg_outputs = namedtuple("VggOutputs",

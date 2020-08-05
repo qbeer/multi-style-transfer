@@ -1,11 +1,18 @@
+import torch
+import numpy as np
+
+# reproducibility
+torch.manual_seed(42)
+np.random.seed(42)
+torch.backends.cudnn.deterministic = True
+torch.backends.cudnn.benchmark = False
+
+from batch_transfroms.batch_transforms import Normalize
+
 from models import LossNetwork, FastStylizationNetwork
 from data_loaders import art_loader, image_loader
 
-from batch_transforms.batch_transforms import Normalize
-
 import matplotlib.pyplot as plt
-import torch
-import numpy as np
 import torchvision
 
 import torchvision.transforms as T
@@ -13,12 +20,6 @@ import torchvision.transforms as T
 import torch.nn.functional as F
 
 from torch.utils.tensorboard import SummaryWriter
-
-# reproducibility
-torch.manual_seed(42)
-np.random.seed(42)
-torch.backends.cudnn.deterministic = True
-torch.backends.cudnn.benchmark = False
 
 # default `log_dir` is "runs", we'll be more specific here
 writer = SummaryWriter('runs/example')
@@ -70,10 +71,14 @@ def content_loss(vgg_outputs, vgg_styled_outputs):
     # Content is present closer to output, whilts
     # style is closer nearer to input
     loss = 0.0
-    #_, channels, H, W = vgg_outputs.relu3.size()
-    #loss = F.mse_loss(vgg_outputs.relu3, vgg_styled_outputs.relu3)
+    batch_size, channels, H, W = vgg_outputs.relu3.size()
+    loss += F.mse_loss(vgg_outputs.relu3,
+                       vgg_styled_outputs.relu3,
+                       reduction='sum') / batch_size
     batch_size, channels, H, W = vgg_outputs.relu4.size()
-    loss += F.mse_loss(vgg_outputs.relu4, vgg_styled_outputs.relu4)
+    loss += F.mse_loss(vgg_outputs.relu4,
+                       vgg_styled_outputs.relu4,
+                       reduction='sum') / batch_size
     return loss
 
 
@@ -89,7 +94,7 @@ def matplotlib_imshow(img, one_channel=False):
 
 style_net = FastStylizationNetwork(n_styles=8).to(device='cuda')
 
-optimizer = torch.optim.SGD(style_net.parameters(), lr=0.001, momentum=0.9)
+optimizer = torch.optim.Adam(style_net.parameters(), lr=0.001)
 
 loss_net = LossNetwork().to(device='cuda')
 loss_net.eval()
@@ -115,7 +120,7 @@ for images, _ in image_loader:
     vgg_outputs = loss_net(prepared_images)
 
     c_loss = content_loss(vgg_outputs, vgg_styled_outputs)
-    s_loss = 10e2 * style_loss(vgg_art_outputs, vgg_styled_outputs)
+    s_loss = 10e5 * style_loss(vgg_art_outputs, vgg_styled_outputs)
 
     loss = c_loss + s_loss
 
