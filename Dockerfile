@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
     libsm6 \
     libxext6 \
     libxrender-dev \
+    ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
 # Create a working directory
@@ -37,18 +38,20 @@ RUN curl -sLo ~/miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-py38
     && conda install -y python==3.8.1 \
     && conda clean -ya
 
-COPY ./models ./models
-COPY ./weights/model ./weights/model
-COPY __init__.py .
 COPY multi-style.yml .
-COPY run.py .
-
 RUN conda env create -f multi-style.yml
+
+RUN mkdir /app/frames
+RUN mkdir /app/output
+
+COPY ./models ./models
+COPY ./weights/model_best ./weights/model
+COPY __init__.py .
+COPY docker_run.sh run.sh
+COPY create_styled_movies.py .
 
 # Make RUN commands use the new environment:
 SHELL ["conda", "run", "-n", "pytorch", "/bin/bash", "-c"]
 
-RUN pip install opencv-python
-
 # The code to run when container is started:
-ENTRYPOINT ["conda", "run", "-n", "pytorch", "python", "run.py"]
+ENTRYPOINT ["sh", "./run.sh"]

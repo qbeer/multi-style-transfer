@@ -4,4 +4,5 @@ data/VOC*
 data/cifar*
 *.png
 runs/
-weights/
+weights/*
+output/*
