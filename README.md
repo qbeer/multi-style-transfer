@@ -56,4 +56,10 @@ Live demo:
 
 [![outside-scene-with-friends](https://img.youtube.com/vi/Py-t08dwXF8/0.jpg)](https://www.youtube.com/watch?v=Py-t08dwXF8)
 
+[![outside-scene-with-friends](https://img.youtube.com/vi/EERtL91mgeg/0.jpg)](https://www.youtube.com/watch?v=EERtL91mgeg)
 
+[![outside-scene-with-friends](https://img.youtube.com/vi/AN7N9Ruida0/0.jpg)](https://www.youtube.com/watch?v=AN7N9Ruida0)
+
+[![outside-scene-with-friends](https://img.youtube.com/vi/3_20E1DQpKs/0.jpg)](https://www.youtube.com/watch?v=3_20E1DQpKs)
+
+## @Regards, Alex
